@@ -5,7 +5,7 @@
         <meta http-equiv='X-UA-Compatible' content='IE=edge'>
         <title>horraire</title>
         <meta name='viewport' content='width=device-width, initial-scale=1'>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="main.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="function.js"></script>
 </head>
