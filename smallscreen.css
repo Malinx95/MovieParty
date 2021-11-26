@@ -1,0 +1,31 @@
+#presentation {
+    position: relative;
+    background-color: #4A3F35;
+    color: blanchedalmond;
+    padding: 5%;
+}
+
+#test {
+    background-color: #2F2519;
+}
+
+#search-section {
+    background-color: #2F2519;
+    color: blanchedalmond;
+    padding: 5%;
+}
+
+#profile-background {
+    background-color: #FA7D09;
+}
+
+#profile-picture-process {
+    display: flex;
+    justify-content: center;
+    padding-top: 18%;
+}
+
+#profile-picture {
+    width: 200px;
+    height: 200px;
+}

@@ -1,0 +1,40 @@
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color: #2F2519;
+    color: blanchedalmond;
+    
+}
+
+h2,h3 {
+    color: blanchedalmond;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #FF4301;
+}
+
+a:hover {
+    color: #FF4301;
+}
+
+footer {
+    display: flex;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #221b12;
+}
+
+.stylished-ul {
+    list-style-type: none;
+    text-decoration: none;
+}
+
+#search-index-form {
+    display: flex;
+    justify-content: center;
+}
