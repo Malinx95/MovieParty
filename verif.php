@@ -1,13 +1,7 @@
 <?php
+    require_once 'ressources/auth.php';
     session_start();
-    $dsn = 'mysql:dbname=movieparty_db;host=mysql-movieparty.alwaysdata.net';
-    $user = '244287';
-    $password = 'x772hs44PYeCwbq';
-    try{
-    $db = new PDO($dsn, $user, $password);
-    } catch (PDOException $e) {
-        echo 'Échec lors de la connexion : ' . $e->getMessage();
-    }
+    $db = dbInit();
     //vérifier si l'id existe dans la base => verif passe à 1
     $id_url = $_GET["id"];
     $query_verif = $db->prepare("SELECT id_user FROM User WHERE id_user = :id_user");

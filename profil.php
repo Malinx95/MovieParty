@@ -16,16 +16,9 @@
 </head>
 <body>
   <?php
+    require_once 'ressources/auth.php';
     session_start();
-      //login access
-      $dsn = 'mysql:dbname=movieparty_db;host=mysql-movieparty.alwaysdata.net';
-      $user = '244287';
-      $password = 'x772hs44PYeCwbq';
-      try{
-        $db = new PDO($dsn, $user, $password);
-      } catch (PDOException $e) {
-          echo 'Échec lors de la connexion : ' . $e->getMessage();
-      }
+      $db = dbInit();
       if(isset($_SESSION["id_user"])){
         $query_register = $db->prepare("UPDATE User SET mail = :mail, pseudo = :pseudo, nom = :nom, prenom = :prenom, date_naissance = :date_naissance WHERE id_user = :id_user");
         if(!filter_var($_GET["mail"], FILTER_VALIDATE_EMAIL)){

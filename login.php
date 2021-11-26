@@ -19,18 +19,11 @@
     </form>
 
     <?php
-
+        require_once 'ressources/auth.php';
         session_start();
         if(isset($_GET["pseudo"]) && isset($_GET["password"])){
             //login access
-            $dsn = 'mysql:dbname=movieparty_db;host=mysql-movieparty.alwaysdata.net';
-            $user = '244287';
-            $password = 'x772hs44PYeCwbq';
-            try{
-            $db = new PDO($dsn, $user, $password);
-            } catch (PDOException $e) {
-                echo 'Échec lors de la connexion : ' . $e->getMessage();
-            }
+            $db = dbInit();
 
             $msg = "";
             $querry_login = $db->prepare("SELECT password, id_user FROM User WHERE pseudo = :pseudo");

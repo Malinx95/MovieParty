@@ -25,16 +25,10 @@
     </form>
 
     <?php
+        require_once 'ressources/auth.php';
         if(isset($_GET["mail"]) && isset($_GET["pseudo"]) && isset($_GET["password"])){
             //login access
-            $dsn = 'mysql:dbname=movieparty_db;host=mysql-movieparty.alwaysdata.net';
-            $user = '244287';
-            $password = 'x772hs44PYeCwbq';
-            try{
-            $db = new PDO($dsn, $user, $password);
-            } catch (PDOException $e) {
-                echo 'Échec lors de la connexion : ' . $e->getMessage();
-            }
+            $db = dbInit();
             $query_register = $db->prepare("INSERT INTO User (pseudo, mail, password, id_user) VALUES (:pseudo, :mail, :password, :id_user)"); //id_user : TODO generate an id (for instance it is just the nickname)
             $msg = "";
             if(!filter_var($_GET["mail"], FILTER_VALIDATE_EMAIL)){
