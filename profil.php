@@ -17,7 +17,6 @@
 <body>
   <?php
     session_start();
-    if(isset($_GET["mail"]) && isset($_GET["pseudo"]) && isset($_GET["password"])){
       //login access
       $dsn = 'mysql:dbname=movieparty_db;host=mysql-movieparty.alwaysdata.net';
       $user = '244287';
@@ -27,7 +26,21 @@
       } catch (PDOException $e) {
           echo 'Échec lors de la connexion : ' . $e->getMessage();
       }
-    }
+      if(isset($_SESSION["id_user"])){
+        $query_register = $db->prepare("UPDATE User SET mail = :mail, pseudo = :pseudo, nom = :nom, prenom = :prenom, date_naissance = :date_naissance WHERE id_user = :id_user");
+        if(!filter_var($_GET["mail"], FILTER_VALIDATE_EMAIL)){
+            $msg .= "error format mail invalid ! \n";
+        }
+        else{
+            $query_register->bindParam(":id_user", $_SESSION["id_user"]);
+            $query_register->bindParam(":mail", $_GET["mail"]);
+            $query_register->bindParam(":pseudo", $_GET["pseudo"]);
+            $query_register->bindParam(":nom", $_GET["name"]);
+            $query_register->bindParam(":prenom", $_GET["first-name"]);
+            $query_register->bindParam(":date_naissance", $_GET["date_naissance"]);
+            $query_register->execute();
+        }
+      }
   ?>
   <header>
     <nav id="test" class="navbar navbar-dark bg-dark fixed-top">
@@ -82,42 +95,56 @@
   </div>
   <div id="nickname">
     <?php
-      if(isset($_SESSION["pseudo"])){
-        $pseudo = $_SESSION["pseudo"];
+        $dsn = 'mysql:dbname=movieparty_db;host=mysql-movieparty.alwaysdata.net';
+        $user = '244287';
+        $password = 'x772hs44PYeCwbq';
+        try{
+          $db = new PDO($dsn, $user, $password);
+        } catch (PDOException $e) {
+            echo 'Échec lors de la connexion : ' . $e->getMessage();
+        }
+        $query_profile = $db->prepare("SELECT pseudo, nom, prenom, date_naissance, mail FROM User WHERE id_user = :id_user");
+        $query_profile->bindParam(":id_user", $_SESSION["id_user"]);
+        $query_profile->execute();
+        $query_profile_result = $query_profile->fetchAll();
+        $pseudo = $query_profile_result[0]["pseudo"];
         echo("<h2>$pseudo</h2>");
-    }
     ?>
   </div>
   <form action="" method="get">
     <div class="form-display">
         <label for="name">Nom :</label>
-        <input type="text" name="name" id="name" value="Mon super nom">
+        <input type="text" name="name" id="name" <?php
+          $nom = $query_profile_result[0]["nom"];
+          echo("value='$nom'");
+    ?>>
     </div>
     <div class="form-display">
       <label for="first-name">Prénom:</label>
-      <input type="text" name="first-name" id="first-name" value="Mon super prénom">
+      <input type="text" name="first-name" id="first-name" <?php
+          $prenom = $query_profile_result[0]["prenom"];
+          echo("value='$prenom'");
+    ?>>
     </div>
     <div class="form-display">
       <label for="pseudo">Pseudo :</label>
       <input type="text" name="pseudo" id="pseudo" <?php
-      if(isset($_SESSION["pseudo"])){
-          $pseudo = $_SESSION["pseudo"];
+          $pseudo = $query_profile_result[0]["pseudo"];
           echo("value='$pseudo'");
-      }
     ?>>
     </div>
     <div class="form-display">
       <label for="mail">mail :</label>
       <input type="text" name="mail" id="email" <?php
-      if(isset($_SESSION["mail"])){
-          $mail = $_SESSION["mail"];
+          $mail = $query_profile_result[0]["mail"];
           echo("value='$mail'");
-      }
     ?>>
     </div>
-    <div class="form-display">
-      <label for="birthday">Date de naissance :</label>
-      <input type="text" name="birthday" id="birthday" value="01/01/2000">
+      <label for="start">Date de naissance :</label>
+      <input type="date" id="birthday" name="date_naissance" <?php
+          $date_naissance = $query_profile_result[0]["date_naissance"];
+          echo("value='$date_naissance'");
+      ?>>
     </div>
     <div class="form-display">
       <input type="submit" value="Enregistrer">
@@ -125,29 +152,7 @@
   </form>
 
   <?php
-    if(isset($_GET["mail"]) && isset($_GET["pseudo"]) && isset($_GET["password"])){
-      $querry_register = $db->prepare("INSERT INTO User (pseudo, mail, password, id_user) VALUES (:pseudo, :mail, :password, :pseudo)");
-      $msg = "";
-      if(!filter_var($_GET["mail"], FILTER_VALIDATE_EMAIL)){
-          $msg .= "error format mail invalid ! \n";
-      }
-      else{
-          $querry_register->bindParam(":mail", $_GET["mail"]);
-          $querry_register->bindParam(":pseudo", $_GET["pseudo"]);
-          $password = $_GET["password"];
-          $password = password_hash($password, PASSWORD_DEFAULT);
-          $querry_register->bindParam(":password", $password);
-          if($querry_register->execute()){
-              $msg .= "succesfully registered";
-          }
-          else{
-              $error = $querry_register->errorInfo();
-              print_r($error);
-              $msg .= "error sql !";
-          }
-      }
-      echo($msg);
-    }
+    
   ?>
 
   <form action="" method="post">

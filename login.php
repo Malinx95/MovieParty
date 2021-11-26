@@ -33,7 +33,7 @@
             }
 
             $msg = "";
-            $querry_login = $db->prepare("SELECT password FROM User WHERE pseudo = :pseudo");
+            $querry_login = $db->prepare("SELECT password, id_user FROM User WHERE pseudo = :pseudo");
             $querry_login->bindParam(":pseudo", $_GET["pseudo"]);
             $password = $_GET["password"];
             $querry_login->execute();
@@ -42,7 +42,7 @@
 
             if(password_verify($password, $hash)){
                 $msg .= "succesfully loged in !";
-                $_SESSION["pseudo"] = $_GET["pseudo"];
+                $_SESSION["id_user"] = $result[0]["id_user"];
                 header("Location: profil.php");
             }
             else{
