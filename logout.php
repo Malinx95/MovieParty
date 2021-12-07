@@ -1,9 +1,9 @@
 <?php
     session_start();
-    if(isset($_SESSION["pseudo"])){
-        unset($_SESSION["pseudo"]);
+    if(isset($_SESSION["id_user"])){
+        unset($_SESSION["id_user"]);
         session_destroy();
         $_SESSION = array();
     }
-    header("Location: test.php");
+    header("Location: index.html");
 ?>

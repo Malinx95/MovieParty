@@ -29,7 +29,7 @@
         if(isset($_GET["mail"]) && isset($_GET["pseudo"]) && isset($_GET["password"])){
             //login access
             $db = dbInit();
-            $query_register = $db->prepare("INSERT INTO User (pseudo, mail, password, id_user) VALUES (:pseudo, :mail, :password, :id_user)"); //id_user : TODO generate an id (for instance it is just the nickname)
+            $query_register = $db->prepare("INSERT INTO User (pseudo, mail, password, id_user) VALUES (:pseudo, :mail, :password, :id_user)");
             $msg = "";
             if(!filter_var($_GET["mail"], FILTER_VALIDATE_EMAIL)){
                 $msg .= "error format mail invalid ! \n";

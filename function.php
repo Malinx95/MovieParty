@@ -136,7 +136,7 @@
     }
 
     function list_cinema(){
-        $url = "https://www.allocine.fr/_/autocomplete/mobile/theater/" . $_GET["cinema"];
+        $url = "https://www.allocine.fr/_/autocomplete/mobile/theater/" . $_GET["search"];
         $json = file_get_contents($url);
         $search = json_decode($json, true);
         if(isset($search["results"]) && !is_null($search["results"])){
