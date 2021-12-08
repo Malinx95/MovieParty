@@ -34,6 +34,9 @@
 		if(isset($_GET["id"]) && !is_null($_GET["id"])){
 			echo(table_showtimes());
 		}
+        if(isset($_GET["search"]) && !empty($_GET["search"]) && isset($_GET["option"]) && $_GET["option"] == "user"){
+            echo(list_users());
+        }
     ?>
 </body>
 </html>

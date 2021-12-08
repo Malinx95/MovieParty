@@ -157,4 +157,26 @@
         return $out;
     }
 
+    function list_users(){
+        $addr = substr($_SERVER["PHP_SELF"], 0, strripos($_SERVER["PHP_SELF"], "/")+1);
+        $addr .= "profil.php?id_user=";
+        $db = dbInit();
+        $query_party = $db->prepare("SELECT id_user, pseudo FROM user");
+        $query_party->execute();
+        $result = $query_party->fetchAll();
+        $noResult = true;
+        $out = "<ul>\n";
+        foreach($result as $line){
+            if(strpos($line[1], $_GET["search"]) !== false){
+                $out .= "\t\t<li><a href=\"" . $addr . $line[0] . "\">" . $line[1] . "</a></li>\n";
+                $noResult = false;
+            }
+        }
+        if($noResult){
+            $out = "<li>Pas de resultat pour cette recherche</li>";
+        }
+        $out .= "\t</ul>\n";
+        return $out;
+    }
+
 ?>
