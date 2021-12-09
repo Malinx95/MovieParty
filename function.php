@@ -161,22 +161,91 @@
         $addr = substr($_SERVER["PHP_SELF"], 0, strripos($_SERVER["PHP_SELF"], "/")+1);
         $addr .= "profil.php?id_user=";
         $db = dbInit();
-        $query_party = $db->prepare("SELECT id_user, pseudo FROM user");
-        $query_party->execute();
-        $result = $query_party->fetchAll();
+        $query_users = $db->prepare("SELECT id_user, pseudo FROM user");
+        $query_users->execute();
+        $result = $query_users->fetchAll();
         $noResult = true;
         $out = "<ul>\n";
         foreach($result as $line){
-            if(strpos($line[1], $_GET["search"]) !== false){
+            if(stripos($line[1], $_GET["search"]) !== false){
                 $out .= "\t\t<li><a href=\"" . $addr . $line[0] . "\">" . $line[1] . "</a></li>\n";
                 $noResult = false;
             }
         }
         if($noResult){
-            $out = "<li>Pas de resultat pour cette recherche</li>";
+            $out .= "<li>Pas de resultat pour cette recherche</li>";
         }
         $out .= "\t</ul>\n";
         return $out;
     }
 
+    function list_party(){
+        $addr = substr($_SERVER["PHP_SELF"], 0, strripos($_SERVER["PHP_SELF"], "/")+1);
+        $addr .= "party.php?name=";
+        $db = dbInit();
+        $query_party = $db->prepare("SELECT * FROM party");
+        $query_party->execute();
+        $result = $query_party->fetchAll();
+        $noResult = true;
+        $out = "<ul>\n";
+        $filters = [];
+        if(isset($_GET["cine_name"]) && !empty($_GET["cine_name"])){
+            $filters["cine_name"] = false;
+        }
+        if(isset($_GET["movie"]) && !empty($_GET["movie"])){
+            $filters["movie"] = false;
+        }
+        if(isset($_GET["search"]) && !empty($_GET["search"])){
+            $filters["search"] = false;
+        }
+        foreach($result as $line){
+            if(isset($filters["search"])){
+                if(stripos($line[0], $_GET["search"]) !== false){
+                    $filters["search"] = true;
+                }
+            }
+            if(isset($filters["movie"])){
+                $url = "https://www.allocine.fr/_/autocomplete/mobile/movie/" . $_GET["movie"];
+                $json = file_get_contents($url);
+                $search = json_decode($json, true);
+                if(isset($search["results"]) && !is_null($search["results"])){
+                    for($i = 0; $i < sizeof($search["results"]); $i++){
+                        $name = $search["results"][$i]["label"];
+                        if($name == $line[4]){
+                            $filters["movie"] = true;
+                        }
+                    }
+                }
+            }
+            if(isset($filters["cine_name"])){
+                $url = "https://www.allocine.fr/_/autocomplete/mobile/theater/" . $_GET["cine_name"];
+                $json = file_get_contents($url);
+                $search = json_decode($json, true);
+                if(isset($search["results"]) && !is_null($search["results"])){
+                    for($i = 0; $i < sizeof($search["results"]); $i++){
+                        $name = $search["results"][$i]["label"];
+                        if($name == $line[3]){
+                            $filters["cine_name"] = true;
+                        }
+                    }
+                }
+            }
+            $correct = true;
+            foreach($filters as $k => $v){
+                if($v == false){
+                    $correct = false;
+                }
+                $filters[$k] = false;
+            }
+            if($correct){
+                $noResult = false;
+                $out .= "\t\t<li><a href=\"" . $addr . $line[0] . "\">" . $line[0] . " - " . $line[1] . "</a></li>\n";
+            }
+        }
+        if($noResult){
+            $out .= "<li>Pas de resultat pour cette recherche</li>";
+        }
+        $out .= "\t</ul>\n";
+        return $out;
+    }
 ?>

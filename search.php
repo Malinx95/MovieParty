@@ -11,9 +11,15 @@
 </head>
 <body>
 
-	<form action="" method="get">
-        <label for="cinema">Chercher un cinema:
-            <input type="text" name="search" id="cinema" placeholder="rechercher" <?php if(isset($_GET["cinema"]) && !empty($_GET["cinema"])){echo("value=\""); echo($_GET["cinema"]); echo("\"");} ?> required>
+	<form action="" method="get" id="search_form">
+        <label >Chercher par nom :
+            <input type="text" name="search" id="search" placeholder="nom" <?php if(isset($_GET["search"]) && !empty($_GET["search"])){echo("value=\""); echo($_GET["search"]); echo("\"");} ?>>
+        </label>
+        <label id="cine_name">Chercher par cinema :
+            <input type="text" name="cine_name" placeholder="cinema" <?php if(isset($_GET["cine_name"]) && !empty($_GET["cine_name"])){echo("value=\""); echo($_GET["cine_name"]); echo("\"");} ?>>
+        </label>
+        <label id="movie">Chercher par film :
+            <input type="text" name="movie" placeholder="film" <?php if(isset($_GET["movie"]) && !empty($_GET["movie"])){echo("value=\""); echo($_GET["movie"]); echo("\"");} ?>>
         </label>
         <div>
             <label for="cinema">cinema</label>
@@ -36,6 +42,9 @@
 		}
         if(isset($_GET["search"]) && !empty($_GET["search"]) && isset($_GET["option"]) && $_GET["option"] == "user"){
             echo(list_users());
+        }
+        if(isset($_GET["option"]) && $_GET["option"] == "party"){
+            echo(list_party());
         }
     ?>
 </body>

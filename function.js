@@ -4,7 +4,6 @@ $(document).ready(function(){
     //         $("this").text(data);
     //     });
     // });
-
     if($("#showtimes").length){
 
         const queryString = window.location.search;
@@ -25,6 +24,24 @@ $(document).ready(function(){
         console.log(date);
 
         setListeners();
+    }
+    if($("#search_form").length){
+        selected_value = $("input[name='option']:checked").val();
+        if(selected_value != "party"){
+            $("#cine_name").hide();
+            $("#movie").hide();
+        }
+        $("#search_form").change(function(){
+            selected_value = $("input[name='option']:checked").val();
+            if(selected_value == "party"){
+                $("#cine_name").show();
+                $("#movie").show();
+            }
+            else{
+                $("#cine_name").hide();
+                $("#movie").hide();
+            }
+        });
     }
 
     function setListeners() {
