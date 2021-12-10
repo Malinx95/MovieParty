@@ -22,6 +22,7 @@
     session_start();
     $db = dbInit();
     if (isset($_SESSION["id_user"])) {
+        echo $_SESSION["id_user"];
         $query_register = $db->prepare("UPDATE User SET mail = :mail, pseudo = :pseudo, nom = :nom, prenom = :prenom, date_naissance = :date_naissance WHERE id_user = :id_user");
         if (!filter_var($_GET["mail"], FILTER_VALIDATE_EMAIL)) {
             $msg = "error format mail invalid ! \n";
@@ -34,12 +35,14 @@
             $query_register->bindParam(":date_naissance", $_GET["date_naissance"]);
             $query_register->execute();
         }
+    } else {
+        header("Location : notfound.php");
     }
     ?>
     <header>
         <nav id="test" class="navbar navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
-                <a class="navbar-brand" href="index.html">Movieparty</a>
+                <a class="navbar-brand" href="index.php">Movieparty</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -51,11 +54,17 @@
                     <div class="offcanvas-body">
                         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="index.html" style="color: black;">Home</a>
+                                <a class="nav-link active" aria-current="page" href="index.php" style="color: black;">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="login.php" style="color: black;">Log in</a>
-                                <a class="nav-link" href="register.php" style="color: black;">Sign in</a>
+                                <?php
+                                    if (isset($_SESSION["id_user"])) {
+                                        echo '<a class="nav-link" href="login.php" style="color: black;">Log in</a>
+                                        <a class="nav-link" href="register.php" style="color: black;">Sign in</a>';
+                                    } else {
+                                        echo '<a class="nav-link" href="profil.php?id_user=' . $_SESSION["id_user"] . '" style="color: black;">' . $_SESSION["pseudo"] .  '</a>';
+                                    }
+                                ?>
                                 <a class="nav-link" href="#" style="color: black;">Instagram, Twitter...</a>
                                 <a class="nav-link" href="https://movieparty334667277.wordpress.com/" target="blank" style="color: black;">Le projet Movieparty</a>
                             </li>
@@ -144,6 +153,13 @@
             <input type="submit" value="Enregistrer">
         </div>
     </form>
+    <footer>
+      <ul class="stylished-ul">
+        <li class="category">Links</li>
+        <li><a href="index.php">cineparty</a></li>
+        <li><a href="">Plan du site</a></li>
+        <li><a href="https://movieparty334667277.wordpress.com/" target="blank">Présentation du projet</a></li>
+      </ul>
+    </footer>
 </body>
-
 </html>

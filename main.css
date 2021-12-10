@@ -39,13 +39,16 @@ footer {
     justify-content: center;
 }
 
-table,
-td {
-    border: 1px solid #333;
+#profile-background {
+    background-color: #FA7D09;
 }
 
-thead,
-tfoot {
-    background-color: #333;
-    color: #fff;
+#centered-item {
+    margin-top: 10%;
+    margin-left: 5%;
+}
+
+.stylished-form {
+    display: flex;
+    flex-direction: column;
 }

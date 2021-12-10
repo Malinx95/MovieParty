@@ -15,10 +15,6 @@
     padding: 5%;
 }
 
-#profile-background {
-    background-color: #FA7D09;
-}
-
 #profile-picture-process {
     display: flex;
     justify-content: center;
