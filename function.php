@@ -42,7 +42,7 @@
           $mail->AltBody = 'Vous vous êtes inscrits sur movieparty avec cet email'; // ajout facultatif de texte sans balises HTML (format texte)
     
           $mail->send();
-          echo 'Message envoyé.';
+          echo '<p>Un mail vous a été envoyé.</p>';
         
         }
         // si le try ne marche pas > exception ici
