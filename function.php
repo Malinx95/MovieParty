@@ -114,14 +114,19 @@
                 $out .="\t\t\t\t<td>";
                 if(isset($result["data"]["movieShowtimeList"]["edges"]["$j"]["node"]["showtimes"][$i]["startsAt"])){
                     $hour = substr($result["data"]["movieShowtimeList"]["edges"]["$j"]["node"]["showtimes"][$i]["startsAt"], 1 + strpos($result["data"]["movieShowtimeList"]["edges"]["$j"]["node"]["showtimes"][$i]["startsAt"],"T"), 5);
-                    $data = array(
-                        "cine_id" => $id,
-                        "cine_name" => $cine,
-                        "movie" => $result["data"]["movieShowtimeList"]["edges"][$j]["node"]["movie"]["title"],
-                        "date" => "$date $hour"
-                    );
-                    $args = http_build_query($data);
-                    $out .= "<a href=\"form_party.php?$args\">$hour</a>\n";
+                    if(isset($_SESSION["id_user"])){
+                        $data = array(
+                            "cine_id" => $id,
+                            "cine_name" => $cine,
+                            "movie" => $result["data"]["movieShowtimeList"]["edges"][$j]["node"]["movie"]["title"],
+                            "date" => "$date $hour",
+                            "id_user" => $_SESSION["id_user"]
+                        );
+                        $args = http_build_query($data);
+                        $out .= "<a href=\"form_party.php?$args\">$hour</a>";
+                    }else{
+                        $out .= $hour;
+                    }
                 }
                 else{
                     $out .="/";

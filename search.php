@@ -33,10 +33,13 @@
     </form>
     <?php
 		include "function.php";
-
+        session_start();
 		if(isset($_GET["search"]) && !empty($_GET["search"]) && isset($_GET["option"]) && $_GET["option"] == "cinema"){
 			echo(list_cinema());
 		}
+        if(isset($_GET["search"]) && !empty($_GET["search"]) && !isset($_GET["option"])){
+            echo(list_cinema());
+        }
 		if(isset($_GET["id"]) && !is_null($_GET["id"])){
 			echo(table_showtimes());
 		}

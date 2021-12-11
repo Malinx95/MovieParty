@@ -11,8 +11,41 @@
         $query_register_party->bindParam(":movie", $_GET["movie"]);
         $query_register_party->bindParam(":date", $_GET["date"]);
         if($query_register_party->execute()){
-            $msg = "succesfully registered";
-            echo($msg);
+            $query_join = $db->prepare("INSERT INTO joined_group VALUES (:name, :id_user)");
+            $query_join->bindParam(":name", $_GET["name"]);
+            $query_join->bindParam(":id_user", $_GET["id_user"]);
+            if($query_join->execute()){
+                header("Location: party.php?name=" . $_GET["name"]);
+            }
+            else{
+                $error = $query_join->errorInfo();
+                $out = "";
+                foreach($error as $key => $value){
+                    $out .= "$value / ";
+                }
+                $data = array ();
+                if(isset($_GET["name"])){
+                    $data["name"] = $_GET["name"];
+                }
+                if(isset($_GET["description"])){
+                    $data["description"] = $_GET["description"];
+                }
+                if(isset($_GET["cine_id"])){
+                    $data["cine_id"] = $_GET["cine_id"];
+                }
+                if(isset($_GET["cine_name"])){
+                    $data["cine_name"] = $_GET["cine_name"];
+                }
+                if(isset($_GET["movie"])){
+                    $data["movie"] = $_GET["movie"];
+                }
+                if(isset($_GET["date"])){
+                    $data["date"] = $_GET["date"];
+                }
+                $data["error"] = $out;
+                $args = http_build_query($data);
+                header("Location: form_party.php?$args");
+            }
         }
         else{
             $error = $query_register_party->errorInfo();

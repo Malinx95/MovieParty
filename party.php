@@ -30,11 +30,23 @@
                 print_r($query_join->errorInfo());
             }
         }
+        if(isset($_GET["leave"]) && isset($name)){
+            $query_leave = $db->prepare("DELETE FROM joined_group WHERE name = :name AND id_user = :id_user");
+            $query_leave->bindParam(":name", $_GET["name"]);
+            $query_leave->bindParam(":id_user", $_GET["leave"]);
+            if($query_leave->execute()){
+                echo "Succefully left !";
+            }
+            else{
+                echo "erreur sql : ";
+                print_r($query_leave->errorInfo());
+            }
+        }
         if(isset($name)){
             echo("<h1>" . $name . "</h1>\n");
             echo("<h2>" . $result[0]["description"] . "</h2>\n");
             echo("<h3> Le " . $result[0]["date"] . " à " . $result[0]["cine_name"] . " pour le film " . $result[0]["movie"] . "\n");
-            $query_joined = $db->prepare("SELECT joined_group.id_user, pseudo FROM joined_group INNER JOIN user ON joined_group.id_user = user.id_user");
+            $query_joined = $db->prepare("SELECT joined_group.id_user, pseudo FROM joined_group INNER JOIN user ON joined_group.id_user = user.id_user WHERE name = " . "\"" . $_GET["name"] . "\"");
             $query_joined->execute();
             $result = $query_joined->fetchAll();
             echo "<h3>Utilisateur dans la party :</h3>\n";
@@ -50,7 +62,10 @@
             }
             echo "</ul>\n";
             if(isset($_SESSION["id_user"]) && !$is_in){
-                echo("<form action=\"\" method=\"get\"><input type=\"hidden\" name=\"name\" value=\"" . $name ."\"><input type=\"hidden\" name=\"join\" value=\"" . $_SESSION["id_user"] . "\"><input type=\"submit\" value\"rejoindre le groupe\"></form>\n");
+                echo("<form action=\"\" method=\"get\"><input type=\"hidden\" name=\"name\" value=\"" . $name ."\"><input type=\"hidden\" name=\"join\" value=\"" . $_SESSION["id_user"] . "\"><input type=\"submit\" value=\"rejoindre le groupe\"></form>\n");
+            }
+            if(isset($_SESSION["id_user"]) && $is_in){
+                echo("<form action=\"\" method=\"get\"><input type=\"hidden\" name=\"name\" value=\"" . $name ."\"><input type=\"hidden\" name=\"leave\" value=\"" . $_SESSION["id_user"] . "\"><input type=\"submit\" value=\"quitter le groupe\"></form>\n");
             }
         }
         else{
