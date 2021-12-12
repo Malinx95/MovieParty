@@ -6,7 +6,7 @@
     <meta name="google-site-verification" content="mGlldCqqiM8-I28qO26Z5HABiMXQrTD2Eu-VK7viYzg" />
     <meta name="msvalidate.01" content="1D6B1F0828DDB809916C4F729B8A0E09" />
     <meta name="keywords" content="cineparty,movieparty,chercher cinema,cinema,films,amis,couple,party,groupe cinema, groupe,seance cinema,seance,showtime,allocine,lmdb,ensemble">
-    <meta name="description" content="Movieparty vous propose un moyen simple de rencontrer des personnes partageant votre passion : le cinéma !">
+    <meta name="description" content="Cineparty vous propose un moyen simple de rencontrer des personnes partageant votre passion : le cinéma !">
     <title>Cineparty</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">

@@ -238,7 +238,7 @@
     ?>
   </div>
   <div id="party-list">
-      <h3>Party rejoin par l'utilisateur :</h3>
+      <h3>Party rejoints par l'utilisateur :</h3>
       <?php
         $db = dbInit();
         $query_party = $db->prepare("SELECT name FROM joined_group WHERE id_user = :id_user");
