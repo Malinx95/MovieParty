@@ -1,11 +1,16 @@
 <?php
-
+/*
+* objet qui gere l'api allocine
+*/
 class Allocine
 {
     private $_api_url = 'https://graph.allocine.fr/v1/mobile/';
     private $_token;
     private $_user_token;
 
+    /*
+    * fonction qui initialise les identifiants
+    */
     public function __construct()
     {
         // $this->_token = 'cdzJ4OwAJZc:APA91bGIHnUKMixd8xxrV-xedwZYSVcllJ3uXHs2PVriELPfxYBjN7JWyTiOfSmata__TFoD18FoC16SmkEASiWbg6mRqO2vvDESPiumsxsz5puWWgoaHR52f2KHY923dDMVbOBVbi4k';
@@ -13,6 +18,11 @@ class Allocine
         $this->_user_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE1NzE4NDM5NTcsInVzZXJuYW1lIjoiYW5vbnltb3VzIiwiYXBwbGljYXRpb25fbmFtZSI6Im1vYmlsZSIsInV1aWQiOiJmMDg3YTZiZi05YTdlLTQ3YTUtYjc5YS0zMDNiNWEwOWZkOWYiLCJzY29wZSI6bnVsbCwiZXhwIjoxNjg2NzAwNzk5fQ.oRS_jzmvfFAQ47wH0pU3eKKnlCy93FhblrBXxPZx2iwUUINibd70MBkI8C8wmZ-AeRhVCR8kavW8dLIqs5rUfA6piFwdYpt0lsAhTR417ABOxVrZ8dv0FX3qg1JLIzan-kSN4TwUZ3yeTjls0PB3OtSBKzoywGvFAu2jMYG1IZyBjxnkfi1nf1qGXbYsBfEaSjrj-LDV6Jjq_MPyMVvngNYKWzFNyzVAKIpAZ-UzzAQujAKwNQcg2j3Y3wfImydZEOW_wqkOKCyDOw9sWCWE2D-SObbFOSrjqKBywI-Q9GlfsUz-rW7ptea_HzLnjZ9mymXc6yq7KMzbgG4W9CZd8-qvHejCXVN9oM2RJ7Xrq5tDD345NoZ5plfCmhwSYA0DSZLw21n3SL3xl78fMITNQqpjlUWRPV8YqZA1o-UNgwMpOWIoojLWx-XBX33znnWlwSa174peZ1k60BQ3ZdCt9A7kyOukzvjNn3IOIVVgS04bBxl4holc5lzcEZSgjoP6dDIEJKib1v_AAxA34alVqWngeDYhd0wAO-crYW1HEd8ogtCoBjugwSy7526qrh68mSJxY66nr4Cle21z1wLC5lOsex0FbuwvOeFba0ycaI8NJPTUriOdvtHAjhDRSem4HjypGvKs5AzlZ3LAJACCHICNwo3NzYjcxfT4Wo1ur-M';
     }
 
+    /*
+    * fonction qui fait la query
+    * @param $query
+    *   requete
+    */
     private function _do_request($query)
     {
         $data = ['query' => $query];
@@ -33,6 +43,13 @@ class Allocine
         return json_decode($result, true);
     }
 
+    /*
+    * fonction qui fait la requete et renvoi la reponse pour la liste de sceance
+    * @param $id
+    *   id du cinema
+    * @param date
+    *   date du jour pour les sceance
+    */
     public function showtimelist($id, $date = null)
     {
         $id = base64_encode("Theater:" . $id);
