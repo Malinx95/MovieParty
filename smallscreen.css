@@ -15,10 +15,6 @@
     padding: 5%;
 }
 
-#profile-background {
-    background-color: #FA7D09;
-}
-
 #profile-picture-process {
     display: flex;
     justify-content: center;
@@ -28,4 +24,8 @@
 #profile-picture {
     width: 200px;
     height: 200px;
+}
+
+#other_pages{
+    padding-top: 23%;
 }

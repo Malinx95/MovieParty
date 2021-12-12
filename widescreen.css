@@ -8,3 +8,27 @@
     background-color: #2F2519;
     padding: 5%;
 }
+
+#profile-picture-process {
+    display: flex;
+    justify-content: center;
+    padding-top: 5%;
+}
+
+#privacy_infos{
+    margin-left: 10%;
+    margin-right: 10%;
+    justify-content: center;
+}
+
+#other_pages{
+    padding-top: 10%;
+}
+
+#privacy_info{
+    padding: 5%;
+}
+
+#profile_description{
+    padding: 5%;
+}

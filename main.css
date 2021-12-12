@@ -39,13 +39,27 @@ footer {
     justify-content: center;
 }
 
-table,
-td {
-    border: 1px solid #333;
+
+/*profil*/
+
+#profile-background {
+    background-color: #685c4d;
 }
 
-thead,
-tfoot {
-    background-color: #333;
-    color: #fff;
+#profile-picture {
+    width: 300px;
+    height: 200px;
+}
+
+#privacy_infos {
+    background-color: #1d1710;
+    border: #221b12;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#centered-item {
+    margin-top: 10%;
+    margin-left: 5%;
 }

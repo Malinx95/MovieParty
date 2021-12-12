@@ -3,7 +3,10 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Movieparty</title>
+    <meta name="google-site-verification" content="mGlldCqqiM8-I28qO26Z5HABiMXQrTD2Eu-VK7viYzg" />
+    <meta name="msvalidate.01" content="1D6B1F0828DDB809916C4F729B8A0E09" />
+    <meta name="keywords" content="cineparty,movieparty,chercher cinema,cinema,films,amis,couple,party,groupe cinema, groupe,seance cinema,seance,showtime,allocine,lmdb,ensemble">
+    <title>Cineparty</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
     <script src='main.js'></script>
@@ -15,11 +18,14 @@
     <link rel="stylesheet" media="screen and (max-width: 600px)" href="smallscreen.css">
 </head>
 <body>
+  <?php
+    require_once 'ressources/auth.php';
+    session_start();
+  ?>
   <header>
     <nav id="test" class="navbar navbar-dark bg-dark fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">Movieparty</a>
-        <img src="./images/favicon.png" style="width: 5%;" alt="logo" />
+        <a class="navbar-brand" href="index.php"><img src="./images/favicon.png" style="width: 15%;" alt="logo" /></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -31,11 +37,18 @@
           <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="index.html" style="color: black;">Home</a>
+                <a class="nav-link active" aria-current="page" href="index.php" style="color: black;">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="login.php" style="color: black;">Log in</a>
-                <a class="nav-link" href="register.php" style="color: black;">Sign in</a>
+                <?php
+                    if (!isset($_SESSION["id_user"])) {
+                      echo '<a class="nav-link" href="login.php" style="color: black;">Log in</a>
+                      <a class="nav-link" href="register.php" style="color: black;">Sign in</a>';
+                    } else {
+                      echo '<a class="nav-link" href="profil.php?id_user=' . $_SESSION["id_user"] .  '" style="color: black;">Mon profil</a>';
+                      echo '<a class="nav-link" href="logout.php" style="color: black;">Se déconnecter</a>';
+                    }
+                  ?>
                 <a class="nav-link" href="#" style="color: black;">Instagram, Twitter...</a>
                 <a class="nav-link" href="https://movieparty334667277.wordpress.com/" target="blank" style="color: black;">Le projet Movieparty</a>
               </li>
@@ -44,19 +57,16 @@
                   Aller vers
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">
-                  <li><a class="dropdown-item" href="#" style="color: black;">Groupes</a></li>
-                  <li><a class="dropdown-item" href="#" style="color: black;">Mes groupes</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li><a class="dropdown-item" href="#" style="color: black;">Se déconnecter</a></li>
+                  <li><a class="dropdown-item" href="logout.php" style="color: black;">Se déconnecter</a></li>
                 </ul>
               </li>
             </ul>
-            <form class="d-flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+
+              <form action="./search.php?search=" method="get" id="search-index-form">
+                <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+
           </div>
         </div>
       </div>
@@ -88,7 +98,14 @@
           <div class="carousel-caption d-none d-md-block">
             <h5>Créez un compte et partez à l'aventure.</h5>
             <p>Essayez, c'est gratuit</p>
-            <button type="button" class="btn btn-dark">S'inscrire</button>
+            <?php
+              if (!isset($_SESSION["id_user"])) {
+                echo 
+                '<form action="./register.php" method="get" id="search-index-form">
+                  <button type="button" class="btn btn-dark">S\'inscrire</button>
+                </form>';
+              }
+            ?>
           </div>
         </div>
       </div>
@@ -103,21 +120,21 @@
     </div>
     <div id="presentation">
       <div id="text-pres">
-        <p>Ce site web est en cours de développement.</p>
-        <p>Pour l'instant nous nous focalisons sur les petits formats d'écran.</p>
-        <p><a href="profil.php">Accès à la page profil</a> (Work In Progress !)</p>
+        <h2>Faites la connaissance de passionnés de cinéma</h2>
+        <p>Vous avez envie d'aller voir un film au cinéma mais personne ne veut venir avec vous ? Cineparty vous met en relation avec des cinéphiles près de chez vous.</p>
+        <p>Cherchez votre cinéma, sélectionez votre séance et rejoignez un groupe.</p>
       </div>
     </div>
     <div id="search-section">
-        <h2>Recherchez</h2>
-        <form action="./search.php" method="get" id="search-index-form">
-          <input name="search" autocomplete="off" title="Search"/>
+        <h2>La spectacle commence ici</h2>
+        <form action="./search.php?search=" method="get" id="search-index-form">
+          <input name="search" autocomplete="off" title="Search" placeholder="Recherchez un cinéma, un film, un utilisateur, un groupe..." />
         </form>
     </div>
     <footer>
       <ul class="stylished-ul">
         <li class="category">Links</li>
-        <li><a href="index.html">Movieparty</a></li>
+        <li><a href="index.php">cineparty</a></li>
         <li><a href="">Plan du site</a></li>
         <li><a href="https://movieparty334667277.wordpress.com/" target="blank">Présentation du projet</a></li>
       </ul>
