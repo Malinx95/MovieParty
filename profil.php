@@ -18,10 +18,9 @@
 <body>
   <?php
     require_once 'ressources/auth.php';
-    session_start(); 
-    print_r($_FILES);
+    session_start();
       $db = dbInit();
-      if(isset($_SESSION["id_user"])){
+      if(isset($_SESSION["id_user"]) && isset($_GET["ok"])){
         $query_register = $db->prepare("UPDATE user SET mail = :mail, pseudo = :pseudo, nom = :nom, prenom = :prenom, date_naissance = :date_naissance, description = :description  WHERE id_user = :id_user");
         if(!filter_var($_GET["mail"], FILTER_VALIDATE_EMAIL)){
             $msg .= "error format mail invalid ! \n";
@@ -38,9 +37,9 @@
         }
         if (isset($_FILES["avatar"])) {
           $query_update_pp = $db->prepare("UPDATE user SET profil_pic = :profil_pic, type_mime = :type_mime WHERE id_user = :id_user");
-          $query_update_pp->bindParam(":profil_pic", file_get_contents($_FILES["avatar"]["tmp_name"]));
+          $blob = file_get_contents($_FILES["avatar"]["tmp_name"]);
+          $query_update_pp->bindParam(":profil_pic", $blob);
           $query_update_pp->bindParam(":type_mime", $_FILES["avatar"]["type"]);
-          echo $_FILES["avatar"]["type"];
           $query_update_pp->bindParam("id_user", $_SESSION["id_user"]);
           $query_update_pp->execute();
         }
@@ -154,15 +153,20 @@
     <?php
       $dsn = dbInit();
       $query_desc = $db->prepare("SELECT description FROM user WHERE id_user = :id_user");
-      $query_desc->bindParam(":id_user", $_SESSION["id_user"]);
+      $query_desc->bindParam(":id_user", $_GET["id_user"]);
       $query_desc->execute();
       $query_profile_desc = $query_desc->fetchAll();
-      echo '<p>' . $query_profile_desc[0]["description"] . '</p>'
+      if(isset($query_profile_desc[0]["description"]) && !empty($query_profile_desc[0]["description"])){
+        echo '<p>' . $query_profile_desc[0]["description"] . '</p>';
+      }
+      else{
+        echo "<p>Cet utilisateur n'as pas de decription</p>";
+      }
     ?>
   </div>
 
   <div id="privacy_infos">
-    <?php
+      <?php
       if ($_SESSION["id_user"] == $_GET["id_user"]) {
         $dsn = dbInit();
         $query_profile = $db->prepare("SELECT pseudo, nom, prenom, date_naissance, mail, description FROM user WHERE id_user = :id_user");
@@ -178,45 +182,38 @@
         echo '<form action="" method="get" class="stylished-form">
           <div class="form-display">
             <label for="name">Description :</label>
-            <input type="text" name="description" id="description" value="'. $description . '"
-          >
+            <input type="text" name="description" id="description" value="'. $description . '">
           <div class="form-display">
               <label for="name">Nom :</label>
-              <input type="text" name="name" id="name" value="'. $nom . '"
-          >
+              <input type="text" name="name" id="name" value="'. $nom . '">
           </div>
-          <input type="hidden" name="id_user" id="id_user" value="' . $_GET["id_user"] . '"
-          >
+          <input type="hidden" name="id_user" id="id_user" value="' . $_GET["id_user"] . '">
           <div class="form-display">
             <label for="first-name">Prénom:</label>
-            <input type="text" name="first-name" id="first-name" value="' . $prenom . '"
-          >
+            <input type="text" name="first-name" id="first-name" value="' . $prenom . '">
           </div>
           <div class="form-display">
             <label for="pseudo">Pseudo :</label>
-            <input type="text" name="pseudo" id="pseudo" value="' . $pseudo . '"
-          >
+            <input type="text" name="pseudo" id="pseudo" value="' . $pseudo . '">
           </div>
           <div class="form-display">
             <label for="mail">mail :</label>
-            <input type="text" name="mail" id="email" value="' . $mail . '"
-            >
+            <input type="text" name="mail" id="email" value="' . $mail . '">
           </div>
           <div class="form-display">
             <label for="start">Date de naissance :</label>
-            <input type="date" id="birthday" name="date_naissance" value="' . $date_naissance . '"
-            >
+            <input type="date" id="birthday" name="date_naissance" value="' . $date_naissance . '">
           </div>
-        <div class="form-display">
-        <input type="submit" value="Enregistrer">
-        </div>
+          <div class="form-display">
+          <input type="submit" name="ok" value="Enregistrer">
+          </div>
         </form>
           <form method="post" enctype="multipart/form-data" class="stylished-form">
           <label for="avatar">Photo de profil:</label>
           <input type="file"
           id="avatar" name="avatar" accept="image/png, image/jpeg, image/gif">
           <div class="form-display">
-          <input type="submit" value="Enregistrer">
+          <input type="submit" name="ok" value="Enregistrer">
           </div>
         </form>
         <form action="" method="post">
@@ -233,12 +230,32 @@
             <input type="text" name="retype-password" id="retype-password">
           </div>
           <div class="form-display">
-            <input type="submit" value="Enregistrer">
+            <input type="submit" name="ok" value="Enregistrer">
           </div>
         </form>
         ';
       }
     ?>
+  </div>
+  <div id="party-list">
+      <h3>Party rejoin par l'utilisateur :</h3>
+      <?php
+        $db = dbInit();
+        $query_party = $db->prepare("SELECT name FROM joined_group WHERE id_user = :id_user");
+        $query_party->bindParam(":id_user", $_GET["id_user"]);
+        $query_party->execute();
+        $result = $query_party->fetchAll();
+        echo "<ul>\n";
+        $addr = substr($_SERVER["PHP_SELF"], 0, strripos($_SERVER["PHP_SELF"], "/")+1);
+        $addr .= "party.php?";
+        foreach($result as $line){
+            $data = array();
+            $data["name"] = $line[0];
+            $args = http_build_query($data);
+            echo "<li><a href=" . $addr . $args . ">" . $line[0] . "</a></li>\n";
+        }
+        echo "</ul>\n";
+      ?>
   </div>
   <footer>
       <ul class="stylished-ul">
